@@ -8,15 +8,23 @@ namespace JuegoDeCartas
 {
     public class Carta
     {
-        int numeroCarta;
-        public enum Palo { Oros, Copas, Espadas, Bastos }; // Changed to public
+        private int numeroCarta;
+        private Palo palo;
+
+        public enum Palo { Oros, Copas, Espadas, Bastos }
 
         public Carta() { }
 
-        public Carta(int numeroCarta)
+        public Carta(int numeroCarta, Palo palo)
         {
             this.numeroCarta = numeroCarta;
+            this.palo = palo;
         }
 
+        public int NumeroCarta
+        {
+            get { return numeroCarta; }
+            set { numeroCarta = value; }
+        }
     }
 }

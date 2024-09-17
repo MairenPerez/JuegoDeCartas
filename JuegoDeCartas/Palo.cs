@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace JuegoDeCartas
 {
-    enum Palo
+    public enum Palo
     {
-        Oros,
-        Copas,
-        Espadas,
-        Bastos
+        Oros = 0,
+        Copas = 1,
+        Espadas = 2,
+        Bastos = 3
     }
 }

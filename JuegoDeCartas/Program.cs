@@ -12,7 +12,9 @@ namespace JuegoDeCartas
         {
             // Inicializamos una carta
             Carta carta = new Carta(new Random().Next(1, 13), Carta.Palo.Copas);
+            Console.ReadKey();
 
+            // Mostramos la carta
         }
     }
 }
