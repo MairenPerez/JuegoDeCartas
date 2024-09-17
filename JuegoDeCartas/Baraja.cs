@@ -29,7 +29,10 @@ namespace JuegoDeCartas
 
         public void Barajar()
         {
-            
+            Random rdm = new Random();
+            cartas = cartas.OrderBy(c => rdm.Next(rdm.Next())).ToList(); // Ordenamos la lista de cartas de forma aleatoria
+
+
         }
 
         public Carta RobarCarta()
