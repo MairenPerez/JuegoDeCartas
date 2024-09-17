@@ -13,3 +13,10 @@ namespace JuegoDeCartas
         }
     }
 }
+
+/*
+ * + RobarCarta()
+ * +Barajar()
+ * + RobarAlAzar()
+ * + RobarEnPosicionN()
+ */
