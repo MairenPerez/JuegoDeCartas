@@ -10,6 +10,9 @@ namespace JuegoDeCartas
     {
         static void Main(string[] args)
         {
+            // Inicializamos una carta
+            Carta carta = new Carta(new Random().Next(1, 13), Carta.Palo.Copas);
+
         }
     }
 }
