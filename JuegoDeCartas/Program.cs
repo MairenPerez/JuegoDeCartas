@@ -15,13 +15,7 @@ namespace JuegoDeCartas
             Console.ReadKey();
 
             // Mostramos la carta
+            
         }
     }
 }
-
-/*
- * + RobarCarta()
- * +Barajar()
- * + RobarAlAzar()
- * + RobarEnPosicionN()
- */
