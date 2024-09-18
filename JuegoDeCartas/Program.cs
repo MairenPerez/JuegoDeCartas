@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JuegoDeCartas
 {
@@ -18,7 +15,6 @@ namespace JuegoDeCartas
             Baraja baraja = new Baraja();
 
             Console.WriteLine("El juego ha comenzado con " + numJugadores + " jugadores.");
-
             Console.WriteLine();
 
             List<List<Carta>> manosJugadores = RepartirCartas(numJugadores, baraja);
@@ -26,12 +22,6 @@ namespace JuegoDeCartas
             IniciarBatalla(manosJugadores);
         }
 
-        /// <summary>
-        /// Selección de jugadores
-        /// que intervendrán en la 
-        /// partida
-        /// </summary>
-        /// <returns>numJugadores</returns>
         private static int SeleccionarNumJugadores()
         {
             int numJugadores = 0;
@@ -48,12 +38,6 @@ namespace JuegoDeCartas
             return numJugadores;
         }
 
-        /// <summary>
-        /// Según las cartas que disponga el
-        /// jugador, se reparten las cartas
-        /// </summary>
-        /// <param name="numJugadores"></param>
-        /// <param name="baraja"></param>
         private static List<List<Carta>> RepartirCartas(int numJugadores, Baraja baraja)
         {
             int numCartaPorJug = 48 / numJugadores;
@@ -70,7 +54,6 @@ namespace JuegoDeCartas
                 manosJugadores.Add(mano);
             }
 
-            // Si han sobrado cartas, las dejamos en la bara
             int cartasRestantes = 48 % numJugadores;
             if (cartasRestantes > 0)
                 Console.WriteLine($"Han sobrado {cartasRestantes} cartas en la baraja.");
@@ -81,57 +64,91 @@ namespace JuegoDeCartas
         private static void IniciarBatalla(List<List<Carta>> manosJugadores)
         {
             bool juegoTerminado = false;
-            int turnoActual = 0;
-            int[] score = new int[manosJugadores.Count]; // Controlamos las rondas de cada jugador
+            int[] score = new int[manosJugadores.Count];
 
             while (!juegoTerminado)
             {
                 List<Carta> cartasJugadas = new List<Carta>();
-                Console.WriteLine("Ronda Actual: " + turnoActual);
+                Console.WriteLine("Ronda actual:");
 
-                // Cada jugador juega sus cartas
                 for (int i = 0; i < manosJugadores.Count; i++)
                 {
                     List<Carta> manoActual = manosJugadores[i];
-                    Console.WriteLine($"Jugador {i + 1}, selecciona una carta para jugar (1-{manoActual.Count}):");
+                    if (manoActual.Count == 0)
+                        continue;
+
+                    Carta cartaJugada = SeleccionarCarta(manoActual, i);
+                    cartasJugadas.Add(cartaJugada);
+                }
+
+                int jugadorGanador = DeterminarGanador(cartasJugadas);
+                score[jugadorGanador]++;
+                Console.WriteLine($"La carta ganadora es: {cartasJugadas[jugadorGanador]} del Jugador {jugadorGanador + 1}");
+
+                juegoTerminado = VerificarJuegoTerminado(manosJugadores);
+            }
+
+            MostrarPuntajesFinales(score);
+        }
+
+        private static Carta SeleccionarCarta(List<Carta> manoActual, int jugador)
+        {
+            while (true)
+            {
+                try
+                {
+                    Console.WriteLine($"Jugador {jugador + 1}, selecciona una carta para jugar (1-{manoActual.Count}):");
                     for (int j = 0; j < manoActual.Count; j++)
-                        Console.WriteLine($"{j + 1}. {manoActual[j]}");
+                        Console.WriteLine($"{j + 1}: {manoActual[j]}");
 
                     int seleccion = int.Parse(Console.ReadLine()) - 1;
+                    if (seleccion < 0 || seleccion >= manoActual.Count)
+                        throw new ArgumentOutOfRangeException();
+
                     Carta cartaJugada = manoActual[seleccion];
-                    manoActual.RemoveAt(seleccion); // Eliminamos la carta de la mano
-                    cartasJugadas.Add(cartaJugada); // Añadimos la carta jugada
-                    Console.WriteLine($"Jugador {i + 1} ha jugado: {cartaJugada}");
+                    manoActual.RemoveAt(seleccion);
+                    Console.WriteLine($"Jugador {jugador + 1} ha jugado: {cartaJugada}");
+                    return cartaJugada;
                 }
-
-                // Miramos cual es la carta más alta 
-                Carta cartaGanadora = cartasJugadas[0];
-                int jugadorGanador = 0;
-                for (int i = 1; i < cartasJugadas.Count; i++)
+                catch (Exception)
                 {
-                    if (cartasJugadas[i].NumeroCarta > cartaGanadora.NumeroCarta)
-                    {
-                        cartaGanadora = cartasJugadas[i];
-                        jugadorGanador = i;
-                    }
+                    Console.WriteLine("Selección inválida. Por favor, intenta de nuevo.");
                 }
-
-                // Incrementar el puntaje del jugador ganador
-                score[jugadorGanador]++;
-                Console.WriteLine($"Jugador {jugadorGanador + 1} gana la ronda con la carta {cartaGanadora}.");
-
-                // Verificar si el juego ha terminado
-                juegoTerminado = manosJugadores.All(mano => mano.Count == 0);
-                turnoActual++;
-
             }
+        }
 
-            // Mostrar el puntaje final
-            Console.WriteLine("El juego ha terminado. Puntajes finales:");
-            for (int i = 0; i < score.Length; i++)
+        private static int DeterminarGanador(List<Carta> cartasJugadas)
+        {
+            Carta cartaGanadora = cartasJugadas[0];
+            int jugadorGanador = 0;
+            for (int i = 1; i < cartasJugadas.Count; i++)
             {
-                Console.WriteLine($"Jugador {i + 1}: {score[i]} puntos");
+                if (cartasJugadas[i].CompareTo(cartaGanadora) > 0)
+                {
+                    cartaGanadora = cartasJugadas[i];
+                    jugadorGanador = i;
+                }
             }
+            return jugadorGanador;
+        }
+
+        private static bool VerificarJuegoTerminado(List<List<Carta>> manosJugadores)
+        {
+            foreach (var mano in manosJugadores)
+            {
+                if (mano.Count > 0)
+                    return false;
+            }
+            return true;
+        }
+
+        private static void MostrarPuntajesFinales(int[] score)
+        {
+            Console.WriteLine("El juego ha terminado. Score final:");
+            for (int i = 0; i < score.Length; i++)
+                Console.WriteLine($"Jugador {i + 1}: {score[i]} puntos");
+
+            Console.ReadLine();
         }
     }
 }

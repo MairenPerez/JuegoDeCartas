@@ -9,7 +9,7 @@ namespace JuegoDeCartas
 {
     public class Baraja
     {
-        private List<Carta> cartas = new List<Carta>();
+        private List<Carta> cartas;
 
         public Baraja()
         {
@@ -18,7 +18,10 @@ namespace JuegoDeCartas
             foreach (Carta.EPalo epalo in Enum.GetValues(typeof(Carta.EPalo)))
             {
                 for (int i = 1; i <= 13; i++)
-                    cartas.Add(new Carta(i, epalo));
+                {
+                    Carta carta = new Carta(i, epalo);
+                    cartas.Add(carta);
+                }
             }
 
             Barajar();
@@ -45,42 +48,30 @@ namespace JuegoDeCartas
         /// <summary>
         /// Robamos la primera carta de la baraja
         /// </summary>
-        /// <returns>Carta Primera Posición</returns>
+        /// <returns>Carta en la primera posición</returns>
         public Carta RobarCarta()
         {
-            return RobarEnPosicionN(0);
+            return RobarEnPosicion(0);
         }
 
         /// <summary>
         /// Robamos una carta al azar
         /// </summary>
-        /// <returns> Carta Robada en x Posición</returns>
+        /// <returns>Carta robada en una posición aleatoria</returns>
         public Carta RobarAlAzar()
         {
             Random rdm = new Random();
             int indiceRandom = rdm.Next(0, cartas.Count);
 
-            return RobarEnPosicionN(indiceRandom);
+            return RobarEnPosicion(indiceRandom);
         }
 
         /// <summary>
-        /// Robamos la carta según la posicion
-        /// del jugador.
+        /// Robamos la carta en la posición especificada
         /// </summary>
-        /// <param name="posicion"></param>
-        /// <returns>Carta Robada</returns>
-        public Carta RobarEnPosicionN(int posicion)
-        {
-            return RobarEnPosicion(posicion);
-        }
-
-        /// <summary>
-        /// Miramos la posición de la carta
-        /// </summary>
-        /// <param name="posicion"></param>
-        /// <returns>Carta Robada</returns>
-        /// <exception cref="Exception"></exception>
-        private Carta RobarEnPosicion(int posicion)
+        /// <param name="posicion">Posición de la carta a robar</param>
+        /// <returns>Carta robada</returns>
+        public Carta RobarEnPosicion(int posicion)
         {
             if (posicion < 0 || posicion >= cartas.Count)
                 throw new Exception("Posición no válida");
@@ -91,10 +82,9 @@ namespace JuegoDeCartas
         }
 
         /// <summary>
-        /// Devuelve el número de cartas 
-        /// disponibles en la baraja
+        /// Devuelve el número de cartas disponibles en la baraja
         /// </summary>
-        /// <returns>Total cartas</returns>
+        /// <returns>Total de cartas restantes</returns>
         public int CartasRestantes()
         {
             return cartas.Count;

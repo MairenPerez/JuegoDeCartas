@@ -6,30 +6,29 @@ using System.Threading.Tasks;
 
 namespace JuegoDeCartas
 {
-    public class Carta
+    public class Carta : IComparable<Carta>
     {
-        private int numeroCarta;
-        private EPalo epalo;
-
-        public int NumeroCarta
-        {
-            get { return numeroCarta; }
-            set { numeroCarta = value; }
-        }
+        public int NumeroCarta { get; set; }
+        public EPalo Palo { get; set; }
 
         public enum EPalo { Oros, Copas, Espadas, Bastos }
 
         public Carta() { }
 
-        public Carta(int numeroCarta, EPalo epalo)
+        public Carta(int numeroCarta, EPalo palo)
         {
-            this.numeroCarta = numeroCarta;
-            this.epalo = epalo;
+            NumeroCarta = numeroCarta;
+            Palo = palo;
         }
 
         public override string ToString()
         {
-            return numeroCarta + " de " + epalo;
+            return NumeroCarta + " de " + Palo;
+        }
+
+        public int CompareTo(Carta other)
+        {
+            return NumeroCarta.CompareTo(other.NumeroCarta);
         }
     }
 }
