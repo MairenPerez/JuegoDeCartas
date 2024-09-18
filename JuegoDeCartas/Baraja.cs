@@ -89,5 +89,13 @@ namespace JuegoDeCartas
             cartas.RemoveAt(posicion);
             return cartaRobada;
         }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (Carta carta in cartas)
+                sb.AppendLine(carta.ToString());
+            return sb.ToString();
+        }
     }
 }

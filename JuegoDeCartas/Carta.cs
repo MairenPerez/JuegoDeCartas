@@ -26,5 +26,10 @@ namespace JuegoDeCartas
             this.numeroCarta = numeroCarta;
             this.epalo = epalo;
         }
+
+        public override string ToString()
+        {
+            return numeroCarta + " de " + epalo;
+        }
     }
 }

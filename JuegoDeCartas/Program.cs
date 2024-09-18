@@ -17,7 +17,9 @@ namespace JuegoDeCartas
 
             Console.WriteLine("El juego ha comenzado con " + numJugadores + " jugadores.");
 
-            Console.WriteLine(" ");
+            Console.WriteLine();
+
+            RepartirCartas(numJugadores, baraja);
 
         }
 
@@ -33,7 +35,7 @@ namespace JuegoDeCartas
 
             while (numJugadores < 2 || numJugadores > 5)
             {
-                Console.WriteLine("Selecciona el número de jugadores (2-5) ");
+                Console.WriteLine("Selecciona el número de jugadores (2-5)");
                 string input = Console.ReadLine();
                 if (int.TryParse(input, out numJugadores) && numJugadores >= 2 && numJugadores <= 5)
                     return numJugadores;
@@ -43,8 +45,22 @@ namespace JuegoDeCartas
             return numJugadores;
         }
 
-       // Método para repartir las cartas a los jugadores 
-       private static void RepartirCartas(int numJugadores, Baraja baraja) { }
+        // Método para repartir las cartas a los jugadores 
+        private static void RepartirCartas(int numJugadores, Baraja baraja)
+        {
+            // 48 cartas para repartir según el número de jugadores
+            int numCartasPorJugador = 48 / numJugadores;
 
+            for (int i = 0; i < numJugadores; i++)
+            {
+                Console.WriteLine("Jugador " + (i + 1) + " tiene las siguientes cartas:");
+                for (int j = 0; j < numCartasPorJugador; j++)
+                {
+                    Carta carta = baraja.RobarCarta();
+                    Console.WriteLine(carta);
+                }
+                Console.ReadLine();
+            }
+        }
     }
 }
