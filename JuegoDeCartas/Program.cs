@@ -19,8 +19,11 @@ namespace JuegoDeCartas
 
             Console.WriteLine();
 
-            RepartirCartas(numJugadores, baraja);
+            List<List<Carta>> manosJugadores = RepartirCartas(numJugadores, baraja);
 
+            // Iniciamos el juego una vez se hayan repartido las cartas
+
+            IniciarBatalla();
         }
 
         /// <summary>
@@ -45,21 +48,49 @@ namespace JuegoDeCartas
             return numJugadores;
         }
 
-        // Método para repartir las cartas a los jugadores 
-        private static void RepartirCartas(int numJugadores, Baraja baraja)
+        /// <summary>
+        /// Según las cartas que disponga el
+        /// jugador, se reparten las cartas
+        /// </summary>
+        /// <param name="numJugadores"></param>
+        /// <param name="baraja"></param>
+        private static List<List<Carta>> RepartirCartas(int numJugadores, Baraja baraja)
         {
-            // 48 cartas para repartir según el número de jugadores
-            int numCartasPorJugador = 48 / numJugadores;
+            int numCartaPorJug = 48 / numJugadores;
+            List<List<Carta>> manosJugadores = new List<List<Carta>>();
 
             for (int i = 0; i < numJugadores; i++)
             {
-                Console.WriteLine("Jugador " + (i + 1) + " tiene las siguientes cartas:");
-                for (int j = 0; j < numCartasPorJugador; j++)
+                List<Carta> mano = new List<Carta>();
+                for (int j = 0; j < numCartaPorJug; j++)
                 {
                     Carta carta = baraja.RobarCarta();
-                    Console.WriteLine(carta);
+                    mano.Add(carta);
                 }
-                Console.ReadLine();
+                manosJugadores.Add(mano);
+            }
+
+            // Si han sobrado cartas, las dejamos en la bara
+            int cartasRestantes = 48 % numJugadores;
+            if ( cartasRestantes > 0)
+                Console.WriteLine($"Han sobrado {cartasRestantes} cartas en la baraja.");
+
+            return manosJugadores;
+        }
+
+
+
+        private static void IniciarBatalla()
+        {
+            bool juegoTerminado = false;
+            int turnoActual = 0;
+
+            while (!juegoTerminado)
+            {
+                Console.WriteLine($"Turno del jugador {turnoActual + 1}");
+
+
+
             }
         }
     }

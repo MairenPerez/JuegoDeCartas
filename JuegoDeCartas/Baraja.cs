@@ -48,7 +48,7 @@ namespace JuegoDeCartas
         /// <returns>Carta Primera Posición</returns>
         public Carta RobarCarta()
         {
-            return RobarEnPosicionN(0); 
+            return RobarEnPosicionN(0);
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace JuegoDeCartas
         {
             Random rdm = new Random();
             int indiceRandom = rdm.Next(0, cartas.Count);
-            
+
             return RobarEnPosicionN(indiceRandom);
         }
 
@@ -88,6 +88,16 @@ namespace JuegoDeCartas
             Carta cartaRobada = cartas[posicion];
             cartas.RemoveAt(posicion);
             return cartaRobada;
+        }
+
+        /// <summary>
+        /// Devuelve el número de cartas 
+        /// disponibles en la baraja
+        /// </summary>
+        /// <returns>Total cartas</returns>
+        public int CartasRestantes()
+        {
+            return cartas.Count;
         }
 
         public override string ToString()
