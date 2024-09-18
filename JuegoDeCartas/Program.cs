@@ -22,6 +22,10 @@ namespace JuegoDeCartas
             IniciarBatalla(manosJugadores);
         }
 
+        /// <summary>
+        /// Selección de Nº de jugadores en la partida
+        /// </summary>
+        /// <returns>numJugadores</returns>
         private static int SeleccionarNumJugadores()
         {
             int numJugadores = 0;
@@ -38,6 +42,12 @@ namespace JuegoDeCartas
             return numJugadores;
         }
 
+        /// <summary>
+        /// Distribución de cartas entre los jugadores
+        /// </summary>
+        /// <param name="numJugadores"></param>
+        /// <param name="baraja"></param>
+        /// <returns>Cartas</returns>
         private static List<List<Carta>> RepartirCartas(int numJugadores, Baraja baraja)
         {
             int numCartaPorJug = 48 / numJugadores;
@@ -61,6 +71,17 @@ namespace JuegoDeCartas
             return manosJugadores;
         }
 
+        /// <summary>
+        /// Mecanismo de juego
+        /// 
+        /// Controlamos las rondas de 
+        /// cada jugador y determinamos 
+        /// si hay un ganador en cada ronda.
+        /// 
+        /// Llamamos al método MostrarPuntajesFinales
+        /// para saber el resultado final.
+        /// </summary>
+        /// <param name="manosJugadores"></param>
         private static void IniciarBatalla(List<List<Carta>> manosJugadores)
         {
             bool juegoTerminado = false;
@@ -91,6 +112,12 @@ namespace JuegoDeCartas
             MostrarPuntajesFinales(score);
         }
 
+        /// <summary>
+        /// Cada jugador tiene sus propias cartas
+        /// </summary>
+        /// <param name="manoActual"></param>
+        /// <param name="jugador"></param>
+        /// <returns>cartaJugada</returns>
         private static Carta SeleccionarCarta(List<Carta> manoActual, int jugador)
         {
             while (true)
@@ -117,6 +144,12 @@ namespace JuegoDeCartas
             }
         }
 
+        /// <summary>
+        /// Quien tenga la carta más
+        /// alta gana.
+        /// </summary>
+        /// <param name="cartasJugadas"></param>
+        /// <returns>jugadorGanador</returns>
         private static int DeterminarGanador(List<Carta> cartasJugadas)
         {
             Carta cartaGanadora = cartasJugadas[0];
@@ -132,6 +165,11 @@ namespace JuegoDeCartas
             return jugadorGanador;
         }
 
+        /// <summary>
+        /// Comprobamos si el juego ha terminado
+        /// </summary>
+        /// <param name="manosJugadores"></param>
+        /// <returns>True</returns>
         private static bool VerificarJuegoTerminado(List<List<Carta>> manosJugadores)
         {
             foreach (var mano in manosJugadores)
@@ -142,6 +180,10 @@ namespace JuegoDeCartas
             return true;
         }
 
+        /// <summary>
+        /// Mostramos los puntajes finales
+        /// </summary>
+        /// <param name="score"></param>
         private static void MostrarPuntajesFinales(int[] score)
         {
             Console.WriteLine("El juego ha terminado. Score final:");
