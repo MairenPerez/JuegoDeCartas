@@ -9,22 +9,22 @@ namespace JuegoDeCartas
     public class Carta
     {
         private int numeroCarta;
-        private Palo palo;
-
-        public enum Palo { Oros, Copas, Espadas, Bastos }
-
-        public Carta() { }
-
-        public Carta(int numeroCarta, Palo palo)
-        {
-            this.numeroCarta = numeroCarta;
-            this.palo = palo;
-        }
+        private EPalo epalo;
 
         public int NumeroCarta
         {
             get { return numeroCarta; }
             set { numeroCarta = value; }
+        }
+
+        public enum EPalo { Oros, Copas, Espadas, Bastos }
+
+        public Carta() { }
+
+        public Carta(int numeroCarta, EPalo epalo)
+        {
+            this.numeroCarta = numeroCarta;
+            this.epalo = epalo;
         }
     }
 }

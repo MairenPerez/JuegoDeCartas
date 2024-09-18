@@ -16,6 +16,9 @@ namespace JuegoDeCartas
             Baraja baraja = new Baraja();
 
             Console.WriteLine("El juego ha comenzado con " + numJugadores + " jugadores.");
+
+            Console.WriteLine(" ");
+
         }
 
         /// <summary>
@@ -39,5 +42,9 @@ namespace JuegoDeCartas
             }
             return numJugadores;
         }
+
+       // Método para repartir las cartas a los jugadores 
+       private static void RepartirCartas(int numJugadores, Baraja baraja) { }
+
     }
 }
