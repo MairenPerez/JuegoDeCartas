@@ -5,6 +5,9 @@ namespace JuegoDeCartas
 {
     internal class Program
     {
+        /// <summary>
+        /// Método principal que inicia el juego.
+        /// </summary>
         static void Main(string[] args)
         {
             bool jugarDeNuevo = true;
@@ -33,9 +36,9 @@ namespace JuegoDeCartas
         }
 
         /// <summary>
-        /// Permite al usuario seleccionar el número de jugadores.
+        /// Selecciona el número de jugadores para el juego.
         /// </summary>
-        /// <returns>Número de jugadores seleccionados.</returns>
+        /// <returns>Número de jugadores</returns>
         private static int SeleccionarNumJugadores()
         {
             int numJugadores = 0;
@@ -55,9 +58,9 @@ namespace JuegoDeCartas
         /// <summary>
         /// Reparte las cartas entre los jugadores.
         /// </summary>
-        /// <param name="numJugadores">Número de jugadores.</param>
-        /// <param name="baraja">Baraja de cartas.</param>
-        /// <returns>Lista de manos de los jugadores.</returns>
+        /// <param name="numJugadores">Número de jugadores</param>
+        /// <param name="baraja">Baraja de cartas</param>
+        /// <returns>Lista de manos de jugadores</returns>
         private static List<Queue<Carta>> RepartirCartas(int numJugadores, Baraja baraja)
         {
             int numCartaPorJug = 48 / numJugadores;
@@ -75,8 +78,11 @@ namespace JuegoDeCartas
             }
 
             int cartasRestantes = 48 % numJugadores;
-            if (cartasRestantes > 0)
-                Console.WriteLine($"Han sobrado {cartasRestantes} cartas en la baraja.");
+            for (int i = 0; i < cartasRestantes; i++)
+            {
+                Carta carta = baraja.RobarCarta();
+                manosJugadores[i].Enqueue(carta);
+            }
 
             return manosJugadores;
         }
@@ -84,13 +90,13 @@ namespace JuegoDeCartas
         /// <summary>
         /// Inicia la batalla entre los jugadores.
         /// </summary>
-        /// <param name="manosJugadores">Manos de los jugadores.</param>
-        /// <param name="baraja">Baraja de cartas.</param>
+        /// <param name="manosJugadores">Manos de los jugadores</param>
+        /// <param name="baraja">Baraja de cartas</param>
         private static void IniciarBatalla(List<Queue<Carta>> manosJugadores, Baraja baraja)
         {
             bool juegoTerminado = false;
             int[] score = new int[manosJugadores.Count];
-
+           
             while (!juegoTerminado)
             {
                 List<Carta> cartasJugadas = new List<Carta>();
@@ -106,6 +112,24 @@ namespace JuegoDeCartas
                         break;
                     }
 
+                    Console.WriteLine($"Jugador {i + 1}, elige una opción:");
+                    Console.WriteLine("1. Jugar carta");
+                    Console.WriteLine("2. Robar una carta");
+                    string opcion = Console.ReadLine();
+
+                    if (opcion == "2")
+                    {
+                        if (baraja.CartasRestantes() == 0)
+                        {
+                            Console.WriteLine("No hay cartas disponibles para robar.");
+                            continue;
+                        }
+
+                        Carta cartaRobada = baraja.RobarCarta();
+                        manoActual.Enqueue(cartaRobada);
+                        Console.WriteLine($"Has robado: {cartaRobada}");
+                    }
+
                     Carta cartaJugada = manoActual.Dequeue();
                     cartasJugadas.Add(cartaJugada);
                     Console.WriteLine($"Jugador {i + 1} ha jugado: {cartaJugada}");
@@ -115,19 +139,14 @@ namespace JuegoDeCartas
 
                 int jugadorGanador = DeterminarGanador(cartasJugadas, out bool empate);
                 if (empate)
-                {
                     Console.WriteLine("La ronda ha terminado en empate.");
-                }
                 else
                 {
                     score[jugadorGanador]++;
                     Console.WriteLine($"La carta ganadora es: {cartasJugadas[jugadorGanador]} del Jugador {jugadorGanador + 1}");
                     foreach (var carta in cartasJugadas)
-                    {
                         manosJugadores[jugadorGanador].Enqueue(carta);
-                    }
                 }
-
                 juegoTerminado = VerificarJuegoTerminado(manosJugadores);
             }
 
@@ -137,9 +156,9 @@ namespace JuegoDeCartas
         /// <summary>
         /// Determina el ganador de la ronda.
         /// </summary>
-        /// <param name="cartasJugadas">Cartas jugadas en la ronda.</param>
-        /// <param name="empate">Indica si hubo empate.</param>
-        /// <returns>Índice del jugador ganador.</returns>
+        /// <param name="cartasJugadas">Cartas jugadas en la ronda</param>
+        /// <param name="empate">Indica si hubo empate</param>
+        /// <returns>Índice del jugador ganador</returns>
         private static int DeterminarGanador(List<Carta> cartasJugadas, out bool empate)
         {
             Carta cartaGanadora = cartasJugadas[0];
@@ -167,8 +186,8 @@ namespace JuegoDeCartas
         /// <summary>
         /// Verifica si el juego ha terminado.
         /// </summary>
-        /// <param name="manosJugadores">Manos de los jugadores.</param>
-        /// <returns>Indica si el juego ha terminado.</returns>
+        /// <param name="manosJugadores">Manos de los jugadores</param>
+        /// <returns>True si el juego ha terminado, de lo contrario False</returns>
         private static bool VerificarJuegoTerminado(List<Queue<Carta>> manosJugadores)
         {
             int jugadoresConCartas = 0;
@@ -185,7 +204,7 @@ namespace JuegoDeCartas
         /// <summary>
         /// Muestra los puntajes finales de los jugadores.
         /// </summary>
-        /// <param name="score">Puntajes de los jugadores.</param>
+        /// <param name="score">Array de puntajes</param>
         private static void MostrarPuntajesFinales(int[] score)
         {
             Console.WriteLine("El juego ha terminado. Score final:");
